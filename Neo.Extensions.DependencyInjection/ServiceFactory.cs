@@ -27,10 +27,10 @@ namespace Neo.Extensions.DependencyInjection
             return AddService<TDerivedResult>(typeof(TDerivedResult).Name);
         }
 
-        public TService WithOption<TOptions>(Func<TOptions, string> serviceSelector) where TOptions : class, new()
+        public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetService<IOptions<TOptions>>().Value;
-            var key = serviceSelector(options);
+            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var key = keySelector(options);
             return WithOption(key);
         }
 

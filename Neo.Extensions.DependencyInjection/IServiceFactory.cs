@@ -6,7 +6,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService> AddService<TDerivedResult>(string key) where TDerivedResult : TService;
         IServiceFactory<TService> AddService<TDerivedResult>() where TDerivedResult : TService;
-        TService WithOption<TOptions>(Func<TOptions, string> serviceSelector) where TOptions : class, new();
+        TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
         TService WithOption(string key);
     }
 }

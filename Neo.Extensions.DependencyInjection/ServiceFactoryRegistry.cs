@@ -24,7 +24,7 @@ namespace Neo.Extensions.DependencyInjection
             return AddService<TDerivedResult>(typeof(TDerivedResult).Name);
         }
 
-        public TService WithOption<TOptions>(Func<TOptions, string> serviceSelector) where TOptions : class, new()
+        public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
             AddServices();
             return null;
