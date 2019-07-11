@@ -5,40 +5,39 @@ using Microsoft.Extensions.Options;
 
 namespace Neo.Extensions.DependencyInjection
 {
-    public class ServiceFactory<TService, TDefault> where TService : class where TDefault : TService
+    internal class ServiceFactory<TService> : IServiceFactory<TService> where TService : class
     {
         private readonly IServiceProvider serviceProvider;
 
         private readonly IDictionary<string, Type> typeMap = new Dictionary<string, Type>();
 
-        public ServiceFactory(IServiceProvider serviceProvider, string key = null)
+        public ServiceFactory(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            typeMap.Add(key ?? typeof(TDefault).Name, typeof(TDefault));
         }
 
-        public ServiceFactory<TService, TDefault> AddService<TDerivedResult>(string key) where TDerivedResult : TService
+        public IServiceFactory<TService> AddService<TDerivedResult>(string key) where TDerivedResult : TService
         {
             typeMap[key] = typeof(TDerivedResult);
             return this;
         }
 
-        public ServiceFactory<TService, TDefault> AddService<TDerivedResult>() where TDerivedResult : TService
+        public IServiceFactory<TService> AddService<TDerivedResult>() where TDerivedResult : TService
         {
             return AddService<TDerivedResult>(typeof(TDerivedResult).Name);
         }
 
-        public TService GetService<TOptions>(Func<TOptions, string> serviceSelector) where TOptions : class, new()
+        public TService WithOption<TOptions>(Func<TOptions, string> serviceSelector) where TOptions : class, new()
         {
             var options = serviceProvider.GetService<IOptions<TOptions>>().Value;
             var key = serviceSelector(options);
-            return GetService(key);
+            return WithOption(key);
         }
 
-        public TService GetService(string key)
+        public TService WithOption(string key)
         {
-            if (string.IsNullOrEmpty(key))
-                return (TService) serviceProvider.GetRequiredService(typeof(TDefault));
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
 
             if (typeMap.TryGetValue(key, out var type))
                 return (TService) serviceProvider.GetRequiredService(type);

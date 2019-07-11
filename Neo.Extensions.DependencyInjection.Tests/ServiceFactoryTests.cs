@@ -9,21 +9,12 @@ namespace Neo.Extensions.DependencyInjection.Tests
     internal class ServiceFactoryTests
     {
         [Test]
-        public void NewFactory()
-        {
-            var factory = CreateServiceFactory();
-
-            var defaultHandler = factory.GetService(null);
-            Assert.True(defaultHandler is TestHandler);
-        }
-
-        [Test]
         public void AddServiceWithKey()
         {
             var key = "fun";
             var factory = CreateServiceFactory().AddService<FunHandler>(key);
 
-            var funHandler = factory.GetService(key);
+            var funHandler = factory.WithOption(key);
             Assert.True(funHandler is FunHandler);
         }
 
@@ -32,7 +23,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
         {
             var factory = CreateServiceFactory().AddService<FunHandler>();
 
-            var funHandler = factory.GetService(nameof(FunHandler));
+            var funHandler = factory.WithOption(nameof(FunHandler));
             Assert.True(funHandler is FunHandler);
         }
 
@@ -42,8 +33,16 @@ namespace Neo.Extensions.DependencyInjection.Tests
             var factory = CreateServiceFactory(new FactoryOptions {Handler = nameof(FunHandler)})
                 .AddService<FunHandler>();
 
-            var funHandler = factory.GetService<FactoryOptions>(o => o.Handler);
+            var funHandler = factory.WithOption<FactoryOptions>(o => o.Handler);
             Assert.True(funHandler is FunHandler);
+        }
+
+        [Test]
+        public void GetServiceWithNull()
+        {
+            var factory = CreateServiceFactory();
+
+            Assert.Throws<ArgumentNullException>(() => factory.WithOption(null));
         }
 
         [Test]
@@ -51,10 +50,10 @@ namespace Neo.Extensions.DependencyInjection.Tests
         {
             var factory = CreateServiceFactory().AddService<FunHandler>();
 
-            Assert.Throws<ArgumentException>(() => factory.GetService("test"));
+            Assert.Throws<ArgumentException>(() => factory.WithOption("test"));
         }
 
-        private static ServiceFactory<IHandler, TestHandler> CreateServiceFactory(FactoryOptions options = null)
+        private static IServiceFactory<IHandler> CreateServiceFactory(FactoryOptions options = null)
         {
             var services = new ServiceCollection();
             services.AddSingleton<TestHandler>();
@@ -64,7 +63,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
 
             var serviceProvider = services.BuildServiceProvider();
 
-            return new ServiceFactory<IHandler, TestHandler>(serviceProvider);
+            return new ServiceFactory<IHandler>(serviceProvider);
         }
     }
 }
