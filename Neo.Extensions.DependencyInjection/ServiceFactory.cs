@@ -9,12 +9,12 @@ namespace Neo.Extensions.DependencyInjection
     {
         private readonly IServiceProvider serviceProvider;
 
-        private readonly IDictionary<string, Type> typeMap = new Dictionary<string, Type>
-            {{typeof(TDefault).Name, typeof(TDefault)}};
+        private readonly IDictionary<string, Type> typeMap = new Dictionary<string, Type>();
 
-        public ServiceFactory(IServiceProvider serviceProvider)
+        public ServiceFactory(IServiceProvider serviceProvider, string key = null)
         {
             this.serviceProvider = serviceProvider;
+            typeMap.Add(key ?? typeof(TDefault).Name, typeof(TDefault));
         }
 
         public ServiceFactory<TService, TDefault> AddService<TDerivedResult>(string key) where TDerivedResult : TService
@@ -38,12 +38,12 @@ namespace Neo.Extensions.DependencyInjection
         public TService GetService(string key)
         {
             if (string.IsNullOrEmpty(key))
-                return (TService)serviceProvider.GetRequiredService(typeof(TDefault));
+                return (TService) serviceProvider.GetRequiredService(typeof(TDefault));
 
             if (typeMap.TryGetValue(key, out var type))
-                return (TService)serviceProvider.GetRequiredService(type);
+                return (TService) serviceProvider.GetRequiredService(type);
 
-            throw new ArgumentException($"Unable to resolve type for key {key}.");
+            throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
         }
     }
 }

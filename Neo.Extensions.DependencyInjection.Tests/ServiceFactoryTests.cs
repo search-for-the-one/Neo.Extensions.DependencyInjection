@@ -54,7 +54,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
             Assert.Throws<ArgumentException>(() => factory.GetService("test"));
         }
 
-        private ServiceFactory<IHandler, TestHandler> CreateServiceFactory(FactoryOptions options = null)
+        private static ServiceFactory<IHandler, TestHandler> CreateServiceFactory(FactoryOptions options = null)
         {
             var services = new ServiceCollection();
             services.AddSingleton<TestHandler>();
