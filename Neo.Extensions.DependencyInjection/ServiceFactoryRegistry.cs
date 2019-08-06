@@ -1,47 +1,125 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Neo.Extensions.DependencyInjection
 {
-    internal class ServiceFactoryRegistry<TService> : IServiceFactory<TService> where TService : class
+    internal class ServiceFactoryRegistry<TService> : IServiceFactory<TService>
+        where TService : class
     {
         private readonly Action<Type> addService;
-        private readonly ISet<Type> types = new HashSet<Type>();
 
-        public ServiceFactoryRegistry(Action<Type> addService)
-        {
-            this.addService = addService;
-        }
+        public ServiceFactoryRegistry(Action<Type> addService) => this.addService = addService;
 
         public IServiceFactory<TService> AddService<TDerivedResult>(string key) where TDerivedResult : TService
         {
-            types.Add(typeof(TDerivedResult));
+            addService(typeof(TDerivedResult));
             return this;
         }
 
-        public IServiceFactory<TService> AddService<TDerivedResult>() where TDerivedResult : TService
+        public IServiceFactory<TService> AddService<TDerivedResult>() where TDerivedResult : TService =>
+            AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+
+        public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new() => null;
+
+        public TService WithOption(string key) => null;
+    }
+
+    internal class ServiceFactoryRegistry<TService1, TService2> : IServiceFactory<TService1, TService2>
+        where TService1 : class
+        where TService2 : class
+    {
+        private readonly Action<Type> addService;
+
+        public ServiceFactoryRegistry(Action<Type> addService) => this.addService = addService;
+
+        public IServiceFactory<TService1, TService2> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2
         {
-            return AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+            addService(typeof(TDerivedResult));
+            return this;
         }
 
-        public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
+        public IServiceFactory<TService1, TService2> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2 =>
+            AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+
+        public (TService1, TService2) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new() =>
+            (null, null);
+
+        public (TService1, TService2) WithOption(string key) => (null, null);
+    }
+
+    internal class ServiceFactoryRegistry<TService1, TService2, TService3> : IServiceFactory<TService1, TService2, TService3>
+        where TService1 : class
+        where TService2 : class
+        where TService3 : class
+    {
+        private readonly Action<Type> addService;
+
+        public ServiceFactoryRegistry(Action<Type> addService) => this.addService = addService;
+
+        public IServiceFactory<TService1, TService2, TService3> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2, TService3
         {
-            AddServices();
-            return null;
+            addService(typeof(TDerivedResult));
+            return this;
         }
 
-        public TService WithOption(string key)
+        public IServiceFactory<TService1, TService2, TService3> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3 =>
+            AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+
+        public (TService1, TService2, TService3) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new() =>
+            (null, null, null);
+
+        public (TService1, TService2, TService3) WithOption(string key) => (null, null, null);
+    }
+
+    internal class ServiceFactoryRegistry<TService1, TService2, TService3, TService4> : IServiceFactory<TService1, TService2, TService3, TService4>
+        where TService1 : class
+        where TService2 : class
+        where TService3 : class
+        where TService4 : class
+    {
+        private readonly Action<Type> addService;
+
+        public ServiceFactoryRegistry(Action<Type> addService) => this.addService = addService;
+
+        public IServiceFactory<TService1, TService2, TService3, TService4> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2, TService3, TService4
         {
-            AddServices();
-            return null;
+            addService(typeof(TDerivedResult));
+            return this;
         }
 
-        private void AddServices()
+        public IServiceFactory<TService1, TService2, TService3, TService4> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3, TService4 =>
+            AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+
+        public (TService1, TService2, TService3, TService4) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new() =>
+            (null, null, null, null);
+
+        public (TService1, TService2, TService3, TService4) WithOption(string key) => (null, null, null, null);
+    }
+
+    internal class ServiceFactoryRegistry<TService1, TService2, TService3, TService4, TService5> : IServiceFactory<TService1, TService2, TService3, TService4, TService5>
+        where TService1 : class
+        where TService2 : class
+        where TService3 : class
+        where TService4 : class
+        where TService5 : class
+    {
+        private readonly Action<Type> addService;
+
+        public ServiceFactoryRegistry(Action<Type> addService) => this.addService = addService;
+
+        public IServiceFactory<TService1, TService2, TService3, TService4, TService5> AddService<TDerivedResult>(string key)
+            where TDerivedResult : TService1, TService2, TService3, TService4, TService5
         {
-            foreach (var service in types)
-            {
-                addService(service);
-            }
+            addService(typeof(TDerivedResult));
+            return this;
         }
+
+        public IServiceFactory<TService1, TService2, TService3, TService4, TService5> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3, TService4
+            , TService5 =>
+            AddService<TDerivedResult>(typeof(TDerivedResult).Name);
+
+        public (TService1, TService2, TService3, TService4, TService5) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new() =>
+            (null, null, null, null, null);
+
+        public (TService1, TService2, TService3, TService4, TService5) WithOption(string key) => (null, null, null, null, null);
     }
 }
