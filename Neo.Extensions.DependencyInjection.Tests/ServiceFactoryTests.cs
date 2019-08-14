@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Neo.Extensions.DependencyInjection.Tests.Handlers;
-using Neo.Extensions.DependencyInjection.Tests.Options;
+using Neo.Extensions.DependencyInjection.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Neo.Extensions.DependencyInjection.Tests
@@ -11,30 +10,30 @@ namespace Neo.Extensions.DependencyInjection.Tests
         [Test]
         public void AddServiceWithKey()
         {
-            var key = "fun";
-            var factory = CreateServiceFactory().AddService<FunHandler>(key);
+            var key = "key";
+            var factory = CreateServiceFactory().AddService<SingleInterfaceImplementor1>(key);
 
             var funHandler = factory.WithOption(key);
-            Assert.True(funHandler is FunHandler);
+            Assert.True(funHandler is SingleInterfaceImplementor1);
         }
 
         [Test]
         public void AddService()
         {
-            var factory = CreateServiceFactory().AddService<FunHandler>();
+            var factory = CreateServiceFactory().AddService<SingleInterfaceImplementor1>();
 
-            var funHandler = factory.WithOption(nameof(FunHandler));
-            Assert.True(funHandler is FunHandler);
+            var funHandler = factory.WithOption(nameof(SingleInterfaceImplementor1));
+            Assert.True(funHandler is SingleInterfaceImplementor1);
         }
 
         [Test]
         public void GetService()
         {
-            var factory = CreateServiceFactory(new FactoryOptions {Handler = nameof(FunHandler)})
-                .AddService<FunHandler>();
+            var factory = CreateServiceFactory(new FactoryOptions {Implementor = nameof(SingleInterfaceImplementor1) })
+                .AddService<SingleInterfaceImplementor1>();
 
-            var funHandler = factory.WithOption<FactoryOptions>(o => o.Handler);
-            Assert.True(funHandler is FunHandler);
+            var funHandler = factory.WithOption<FactoryOptions>(o => o.Implementor);
+            Assert.True(funHandler is SingleInterfaceImplementor1);
         }
 
         [Test]
@@ -48,22 +47,27 @@ namespace Neo.Extensions.DependencyInjection.Tests
         [Test]
         public void GetServiceException()
         {
-            var factory = CreateServiceFactory().AddService<FunHandler>();
+            var factory = CreateServiceFactory().AddService<SingleInterfaceImplementor1>();
 
             Assert.Throws<ArgumentException>(() => factory.WithOption("test"));
         }
 
-        private static IServiceFactory<IHandler> CreateServiceFactory(FactoryOptions options = null)
+        private static IServiceFactory<IInterface1> CreateServiceFactory(FactoryOptions options = null)
         {
             var services = new ServiceCollection();
-            services.AddSingleton<TestHandler>();
-            services.AddSingleton<FunHandler>();
+            services.AddSingleton<SingleInterfaceImplementor1>();
+            services.AddSingleton<SingleInterfaceImplementor2>();
 
-            services.Configure<FactoryOptions>(o => { o.Handler = options?.Handler; });
+            services.Configure<FactoryOptions>(o => { o.Implementor = options?.Implementor; });
 
             var serviceProvider = services.BuildServiceProvider();
 
-            return new ServiceFactory<IHandler>(serviceProvider);
+            return new ServiceFactory<IInterface1>(serviceProvider);
+        }
+
+        private class FactoryOptions
+        {
+            public string Implementor { get; set; }
         }
     }
 }
