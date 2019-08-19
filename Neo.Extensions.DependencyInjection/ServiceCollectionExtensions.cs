@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Neo.Extensions.DependencyInjection
@@ -535,5 +536,25 @@ namespace Neo.Extensions.DependencyInjection
         }
 
         private static T Get<T>(IServiceProvider x) => x.GetRequiredService<T>();
+
+        // AddConfig
+        public static IServiceCollection AddConfig<TConfig>(this IServiceCollection services, IConfiguration configuration) where TConfig : class
+        {
+            return services.AddSingleton(GetConfigSection);
+
+            TConfig GetConfigSection(IServiceProvider p)
+            {
+                if (p == null)
+                    throw new ArgumentNullException(nameof(p));
+                if (configuration == null)
+                    throw new ArgumentNullException(nameof(configuration));
+
+                var section = configuration.GetSection(typeof(TConfig).Name);
+
+                var config = (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
+                section.Bind(config);
+                return config;
+            }
+        }
     }
 }

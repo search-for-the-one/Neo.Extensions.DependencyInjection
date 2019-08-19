@@ -58,7 +58,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
             services.AddSingleton<SingleInterfaceImplementor1>();
             services.AddSingleton<SingleInterfaceImplementor2>();
 
-            services.Configure<FactoryOptions>(o => { o.Implementor = options?.Implementor; });
+            services.AddSingleton(new FactoryOptions {Implementor = options?.Implementor});
 
             var serviceProvider = services.BuildServiceProvider();
 

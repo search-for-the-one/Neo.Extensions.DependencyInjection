@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Neo.Extensions.DependencyInjection
 {
@@ -25,7 +24,7 @@ namespace Neo.Extensions.DependencyInjection
 
         public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
         }
@@ -63,7 +62,7 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
         }
@@ -103,7 +102,7 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
         }
@@ -145,7 +144,7 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3, TService4) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
         }
@@ -191,7 +190,7 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3, TService4, TService5) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new()
         {
-            var options = serviceProvider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
         }
