@@ -7,7 +7,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService> AddService<TDerivedResult>(string key) where TDerivedResult : TService;
         IServiceFactory<TService> AddService<TDerivedResult>() where TDerivedResult : TService;
-        TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
+        TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class;
         TService WithOption(string key);
     }
 
@@ -17,7 +17,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService1, TService2> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2;
         IServiceFactory<TService1, TService2> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2;
-        (TService1, TService2) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
+        (TService1, TService2) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class;
         (TService1, TService2) WithOption(string key);
     }
 
@@ -28,7 +28,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService1, TService2, TService3> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2, TService3;
         IServiceFactory<TService1, TService2, TService3> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3;
-        (TService1, TService2, TService3) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
+        (TService1, TService2, TService3) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class;
         (TService1, TService2, TService3) WithOption(string key);
     }
 
@@ -40,7 +40,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService1, TService2, TService3, TService4> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2, TService3, TService4;
         IServiceFactory<TService1, TService2, TService3, TService4> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3, TService4;
-        (TService1, TService2, TService3, TService4) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
+        (TService1, TService2, TService3, TService4) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class;
         (TService1, TService2, TService3, TService4) WithOption(string key);
     }
 
@@ -53,7 +53,7 @@ namespace Neo.Extensions.DependencyInjection
     {
         IServiceFactory<TService1, TService2, TService3, TService4, TService5> AddService<TDerivedResult>(string key) where TDerivedResult : TService1, TService2, TService3, TService4, TService5;
         IServiceFactory<TService1, TService2, TService3, TService4, TService5> AddService<TDerivedResult>() where TDerivedResult : TService1, TService2, TService3, TService4, TService5;
-        (TService1, TService2, TService3, TService4, TService5) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class, new();
+        (TService1, TService2, TService3, TService4, TService5) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class;
         (TService1, TService2, TService3, TService4, TService5) WithOption(string key);
     }
 }
