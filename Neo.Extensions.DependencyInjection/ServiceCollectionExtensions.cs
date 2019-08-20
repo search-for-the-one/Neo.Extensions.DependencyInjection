@@ -541,7 +541,9 @@ namespace Neo.Extensions.DependencyInjection
         public static IServiceCollection AddConfig<TConfig>(this IServiceCollection services, IConfiguration configuration) 
             where TConfig : class, IConfig
         {
-            return services.AddSingleton<IConfig, TConfig>().AddSingleton(GetConfigSection);
+            return services
+                .AddSingleton(GetConfigSection)
+                .AddSingleton<IConfig>(Get<TConfig>);
 
             TConfig GetConfigSection(IServiceProvider p)
             {
