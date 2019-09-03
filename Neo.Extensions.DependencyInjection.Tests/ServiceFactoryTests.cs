@@ -5,12 +5,12 @@ using NUnit.Framework;
 
 namespace Neo.Extensions.DependencyInjection.Tests
 {
-    internal class ServiceFactoryTests
+    public class ServiceFactoryTests
     {
         [Test]
         public void AddServiceWithKey()
         {
-            var key = "key";
+            const string key = "key";
             var factory = CreateServiceFactory().AddService<SingleInterfaceImplementor1>(key);
 
             var funHandler = factory.WithOption(key);

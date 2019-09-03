@@ -559,5 +559,14 @@ namespace Neo.Extensions.DependencyInjection
                 return config;
             }
         }
+
+        // AddKeyed
+        public static IServiceCollection AddKeyedServiceProvider(this IServiceCollection services) =>
+            services.AddSingleton<IKeyedServiceProvider, KeyedServiceProvider, KeyedServiceProvider>(new KeyedServiceProvider());
+
+        public static IServiceCollection AddKeyed(this IServiceCollection services, IConfigurationSection configurationSection,
+            Action<IServiceCollection, IConfigurationSection, IServiceProvider> action) =>
+            services.AddSingleton(sp => sp.GetRequiredService<KeyedServiceProvider>()
+                .Add(configurationSection, action, sp));
     }
 }
