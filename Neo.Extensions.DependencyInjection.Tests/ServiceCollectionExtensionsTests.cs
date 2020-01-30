@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using Neo.Extensions.DependencyInjection.Tests.Mocks;
 using NUnit.Framework;
 
 namespace Neo.Extensions.DependencyInjection.Tests
@@ -10,44 +9,76 @@ namespace Neo.Extensions.DependencyInjection.Tests
     public class ServiceCollectionExtensionsTests
     {
         [Test]
-        public void CreateFactory()
+        public void AddSingletonFromFactory()
         {
             var services = new ServiceCollection();
 
             services.AddSingletonFromFactory<IInterface1>(f => f
-                .AddService<SingleInterfaceImplementor1>()
-                .AddService<MultipleInterfaceImplementor1>()
-                .WithOption(nameof(SingleInterfaceImplementor1)));
+                .AddService<Interface1Implementation>()
+                .AddService<MultipleInterfaceImplementation1>()
+                .WithOption(nameof(Interface1Implementation)));
 
             var serviceProvider = services.BuildServiceProvider();
-            Assert.AreEqual(typeof(SingleInterfaceImplementor1), serviceProvider.GetService<IInterface1>().GetType());
+            Assert.AreEqual(typeof(Interface1Implementation), serviceProvider.GetService<IInterface1>().GetType());
         }
 
         [Test]
-        public void CreateFactoryForMultipleInterface()
+        public void AddListOfSingletonsFromFactory()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingletonFromFactory<IInterface1>(f => f
+                .AddService<Interface1Implementation>()
+                .AddService<MultipleInterfaceImplementation1>()
+                .WithOption(new []{nameof(Interface1Implementation), nameof(MultipleInterfaceImplementation1)}));
+
+            var serviceProvider = services.BuildServiceProvider();
+            var instances = serviceProvider.GetService<IEnumerable<IInterface1>>().ToList();
+            Assert.AreEqual(2, instances.Count);
+            CollectionAssert.AreEqual(new []{typeof(Interface1Implementation), typeof(MultipleInterfaceImplementation1)}, instances.Select(f => f.GetType()));
+        }
+
+        [Test]
+        public void AddSingletonFromFactoryForMultipleInterfaces()
         {
             var services = new ServiceCollection();
 
             services.AddSingletonFromFactory<IInterface1, IInterface2, IInterface3>(f => f
-                .AddService<MultipleInterfaceImplementor1>()
-                .WithOption(nameof(MultipleInterfaceImplementor1)));
+                .AddService<MultipleInterfaceImplementation1>()
+                .WithOption(nameof(MultipleInterfaceImplementation1)));
 
             var serviceProvider = services.BuildServiceProvider();
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface1>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface2>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface3>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface1>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface2>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface3>().GetType());
+        }
+
+        [Test]
+        public void AddListOfSingletonsFromFactoryForMultipleInterfaces()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingletonFromFactory<IInterface1, IInterface2, IInterface3>(f => f
+                .AddService<MultipleInterfaceImplementation1>()
+                .AddService<MultipleInterfaceImplementation2>()
+                .WithOption(new []{nameof(MultipleInterfaceImplementation1), nameof(MultipleInterfaceImplementation2)}));
+
+            var serviceProvider = services.BuildServiceProvider();
+            var instances = serviceProvider.GetService<IEnumerable<IInterface1>>().ToList();
+            Assert.AreEqual(2, instances.Count);
+            CollectionAssert.AreEqual(new []{typeof(MultipleInterfaceImplementation1), typeof(MultipleInterfaceImplementation2)}, instances.Select(f => f.GetType()));
         }
 
         [Test]
         public void AddSingletonWithProvider()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementor1>(Provider);
+            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementation1>(Provider);
 
             var serviceProvider = services.BuildServiceProvider();
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface1>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface2>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface3>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface1>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface2>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface3>().GetType());
 
             Assert.AreSame(serviceProvider.GetService<IInterface1>(), serviceProvider.GetService<IInterface2>());
             Assert.AreSame(serviceProvider.GetService<IInterface2>(), serviceProvider.GetService<IInterface3>());
@@ -57,12 +88,12 @@ namespace Neo.Extensions.DependencyInjection.Tests
         public void AddSingletonWithInstance()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementor1>(new MultipleInterfaceImplementor1());
+            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementation1>(new MultipleInterfaceImplementation1());
 
             var serviceProvider = services.BuildServiceProvider();
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface1>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface2>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface3>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface1>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface2>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface3>().GetType());
 
             Assert.AreSame(serviceProvider.GetService<IInterface1>(), serviceProvider.GetService<IInterface2>());
             Assert.AreSame(serviceProvider.GetService<IInterface2>(), serviceProvider.GetService<IInterface3>());
@@ -72,12 +103,12 @@ namespace Neo.Extensions.DependencyInjection.Tests
         public void AddSingletonWithType()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementor1>();
+            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementation1>();
 
             var serviceProvider = services.BuildServiceProvider();
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface1>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface2>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<IInterface3>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface1>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface2>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<IInterface3>().GetType());
 
             Assert.AreSame(serviceProvider.GetService<IInterface1>(), serviceProvider.GetService<IInterface2>());
             Assert.AreSame(serviceProvider.GetService<IInterface2>(), serviceProvider.GetService<IInterface3>());
@@ -87,8 +118,8 @@ namespace Neo.Extensions.DependencyInjection.Tests
         public void AddSingletonWithType2()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementor1>();
-            services.AddSingleton<IInterface1, IInterface2, MultipleInterfaceImplementor2>();
+            services.AddSingleton<IInterface1, IInterface2, IInterface3, MultipleInterfaceImplementation1>();
+            services.AddSingleton<IInterface1, IInterface2, MultipleInterfaceImplementation2>();
 
             var serviceProvider = services.BuildServiceProvider();
 
@@ -96,10 +127,34 @@ namespace Neo.Extensions.DependencyInjection.Tests
             Assert.AreEqual(2, serviceProvider.GetService<IEnumerable<IInterface2>>().Count());
             Assert.AreEqual(1, serviceProvider.GetService<IEnumerable<IInterface3>>().Count());
 
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor1), serviceProvider.GetService<MultipleInterfaceImplementor1>().GetType());
-            Assert.AreEqual(typeof(MultipleInterfaceImplementor2), serviceProvider.GetService<MultipleInterfaceImplementor2>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation1), serviceProvider.GetService<MultipleInterfaceImplementation1>().GetType());
+            Assert.AreEqual(typeof(MultipleInterfaceImplementation2), serviceProvider.GetService<MultipleInterfaceImplementation2>().GetType());
         }
 
-        private static MultipleInterfaceImplementor1 Provider(IServiceProvider serviceProvider) => new MultipleInterfaceImplementor1();
+        private static MultipleInterfaceImplementation1 Provider(IServiceProvider serviceProvider) => new MultipleInterfaceImplementation1();
+
+        private interface IInterface1
+        {
+        }
+
+        private interface IInterface2
+        {
+        }
+
+        private interface IInterface3
+        {
+        }
+
+        private class Interface1Implementation : IInterface1
+        {
+        }
+
+        private class MultipleInterfaceImplementation1 : IInterface1, IInterface2, IInterface3
+        {
+        }
+
+        private class MultipleInterfaceImplementation2 : IInterface1, IInterface2, IInterface3
+        {
+        }
     }
 }

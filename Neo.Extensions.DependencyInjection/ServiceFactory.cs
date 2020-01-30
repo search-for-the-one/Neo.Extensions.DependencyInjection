@@ -24,6 +24,9 @@ namespace Neo.Extensions.DependencyInjection
 
         public TService WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class
         {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
             var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
@@ -38,6 +41,25 @@ namespace Neo.Extensions.DependencyInjection
                 return (TService) serviceProvider.GetRequiredService(type);
 
             throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
+        }
+
+        public IEnumerable<TService> WithOption<TOptions>(Func<TOptions, IEnumerable<string>> keySelector) where TOptions : class
+        {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            var options = serviceProvider.GetRequiredService<TOptions>();
+            var key = keySelector(options);
+            return WithOption(key);
+        }
+
+        public IEnumerable<TService> WithOption(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            foreach (var key in keys)
+                yield return WithOption(key);
         }
     }
 
@@ -62,6 +84,9 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class
         {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
             var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
@@ -77,6 +102,25 @@ namespace Neo.Extensions.DependencyInjection
                     (TService2) serviceProvider.GetRequiredService(type));
 
             throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
+        }
+
+        public IEnumerable<(TService1, TService2)> WithOption<TOptions>(Func<TOptions, IEnumerable<string>> keySelector) where TOptions : class
+        {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            var options = serviceProvider.GetRequiredService<TOptions>();
+            var key = keySelector(options);
+            return WithOption(key);
+        }
+
+        public IEnumerable<(TService1, TService2)> WithOption(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            foreach (var key in keys)
+                yield return WithOption(key);
         }
     }
 
@@ -102,6 +146,9 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class
         {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
             var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
@@ -118,6 +165,25 @@ namespace Neo.Extensions.DependencyInjection
                     (TService3) serviceProvider.GetRequiredService(type));
 
             throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
+        }
+
+        public IEnumerable<(TService1, TService2, TService3)> WithOption<TOptions>(Func<TOptions, IEnumerable<string>> keySelector) where TOptions : class
+        {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            var options = serviceProvider.GetRequiredService<TOptions>();
+            var key = keySelector(options);
+            return WithOption(key);
+        }
+
+        public IEnumerable<(TService1, TService2, TService3)> WithOption(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            foreach (var key in keys)
+                yield return WithOption(key);
         }
     }
 
@@ -144,6 +210,9 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3, TService4) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class
         {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
             var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
@@ -161,6 +230,25 @@ namespace Neo.Extensions.DependencyInjection
                     (TService4) serviceProvider.GetRequiredService(type));
 
             throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
+        }
+
+        public IEnumerable<(TService1, TService2, TService3, TService4)> WithOption<TOptions>(Func<TOptions, IEnumerable<string>> keySelector) where TOptions : class
+        {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            var options = serviceProvider.GetRequiredService<TOptions>();
+            var key = keySelector(options);
+            return WithOption(key);
+        }
+
+        public IEnumerable<(TService1, TService2, TService3, TService4)> WithOption(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            foreach (var key in keys)
+                yield return WithOption(key);
         }
     }
 
@@ -190,6 +278,9 @@ namespace Neo.Extensions.DependencyInjection
 
         public (TService1, TService2, TService3, TService4, TService5) WithOption<TOptions>(Func<TOptions, string> keySelector) where TOptions : class
         {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
             var options = serviceProvider.GetRequiredService<TOptions>();
             var key = keySelector(options);
             return WithOption(key);
@@ -208,6 +299,25 @@ namespace Neo.Extensions.DependencyInjection
                     (TService5) serviceProvider.GetRequiredService(type));
 
             throw new ArgumentException($"Service factory unable to resolve type for key '{key}'. Available options are [{string.Join(", ", typeMap.Keys)}].");
+        }
+
+        public IEnumerable<(TService1, TService2, TService3, TService4, TService5)> WithOption<TOptions>(Func<TOptions, IEnumerable<string>> keySelector) where TOptions : class
+        {
+            if (keySelector == null)
+                throw new ArgumentNullException(nameof(keySelector));
+
+            var options = serviceProvider.GetRequiredService<TOptions>();
+            var key = keySelector(options);
+            return WithOption(key);
+        }
+
+        public IEnumerable<(TService1, TService2, TService3, TService4, TService5)> WithOption(IEnumerable<string> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            foreach (var key in keys)
+                yield return WithOption(key);
         }
     }
 }

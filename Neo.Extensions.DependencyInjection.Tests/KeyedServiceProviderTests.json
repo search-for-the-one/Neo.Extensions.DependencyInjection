@@ -1,0 +1,26 @@
+{
+  "ShopCalculationSection": {
+    "FlowerShop": {
+      "InvoicePriceCalculatorOptions": {
+        "MockPrice": 100
+      },
+      "PostPriceCalculatorOptions": {
+        "MockPrice": 10
+      },
+      "PriceCalculatorFactoryOptions": {
+        "DiscountAmount": 0 
+      }
+    },
+    "BottleShop": {
+      "InvoicePriceCalculatorOptions": {
+        "MockPrice": 200
+      },
+      "PostPriceCalculatorOptions": {
+        "MockPrice": 20
+      },
+      "PriceCalculatorFactoryOptions": {
+        "DiscountAmount": 30
+      }
+    } 
+  }
+}
