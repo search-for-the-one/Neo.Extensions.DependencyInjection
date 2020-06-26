@@ -1,8 +1,13 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Neo.Extensions.DependencyInjection.Configurations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Neo.Extensions.DependencyInjection
 {
@@ -723,7 +728,7 @@ namespace Neo.Extensions.DependencyInjection
         private static T Get<T>(IServiceProvider x) => x.GetRequiredService<T>();
 
         // AddConfig
-        public static IServiceCollection AddConfig<TConfig>(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddConfig<TConfig>(this IServiceCollection services, IConfiguration configuration)
             where TConfig : class, IConfig
         {
             return services
@@ -738,10 +743,35 @@ namespace Neo.Extensions.DependencyInjection
                     throw new ArgumentNullException(nameof(configuration));
 
                 var section = configuration.GetSection(typeof(TConfig).Name);
+                if (section is INeoConfigurationSection neoConfigurationSection)
+                {
+                    return JsonConvert.DeserializeObject<TConfig>(neoConfigurationSection.ToJson() ?? "{}", new NeoCustomCreationConverter(p)) ??
+                           (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
+                }
 
                 var config = (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
                 section.Bind(config);
                 return config;
+            }
+        }
+
+        private class NeoCustomCreationConverter : CustomCreationConverter<object>
+        {
+            private readonly IServiceProvider serviceProvider;
+
+            public NeoCustomCreationConverter(IServiceProvider serviceProvider)
+            {
+                this.serviceProvider = serviceProvider;
+            }
+
+            public override object Create(Type objectType)
+            {
+                return ActivatorUtilities.CreateInstance(serviceProvider, objectType);
+            }
+
+            public override bool CanConvert(Type objectType)
+            {
+                return !objectType.Namespace.StartsWith("System") && objectType.IsClass && objectType.GetConstructors().All(x => x.GetParameters().Any());
             }
         }
 
