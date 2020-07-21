@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Neo.Extensions.DependencyInjection.Configurations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Neo.Extensions.DependencyInjection
 {
@@ -351,19 +350,22 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped<TService5>(Get<TImplementation>);
 
         // AddSingletonFromFactory
-        public static IServiceCollection AddSingletonFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, T> registerServices) where T : class
+        public static IServiceCollection AddSingletonFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, T> registerServices)
+            where T : class
         {
             registerServices(new ServiceFactoryRegistry<T>(type => services.AddSingleton(type)));
             return services.AddSingleton(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices) where T : class
+        public static IServiceCollection AddSingletonFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices)
+            where T : class
         {
             registerServices(new ServiceFactoryRegistry<T>(type => services.AddSingleton(type)));
             return services.AddSingleton(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -374,7 +376,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2>(p)).Item2);
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -385,7 +388,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2>(p)).Select(item => item.Item2));
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -398,7 +402,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Item3);
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -411,7 +416,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Select(item => item.Item3));
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -426,7 +432,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Item4);
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -441,7 +448,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Select(item => item.Item4));
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -458,7 +466,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton(p => registerServices(new ServiceFactory<T1, T2, T3, T4, T5>(p)).Item5);
         }
 
-        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
+        public static IServiceCollection AddSingletonFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -476,19 +485,22 @@ namespace Neo.Extensions.DependencyInjection
         }
 
         // AddTransientFromFactory
-        public static IServiceCollection AddTransientFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, T> registerServices) where T : class
+        public static IServiceCollection AddTransientFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, T> registerServices)
+            where T : class
         {
             registerServices(new ServiceFactoryRegistry<T>(type => services.AddTransient(type)));
             return services.AddTransient(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddTransientFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices) where T : class
+        public static IServiceCollection AddTransientFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices)
+            where T : class
         {
             registerServices(new ServiceFactoryRegistry<T>(type => services.AddTransient(type)));
             return services.AddTransient(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -499,7 +511,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2>(p)).Item2);
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -510,7 +523,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2>(p)).Select(item => item.Item2));
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -523,7 +537,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Item3);
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -536,7 +551,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Select(item => item.Item3));
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -551,7 +567,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Item4);
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -566,7 +583,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Select(item => item.Item4));
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -583,7 +601,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddTransient(p => registerServices(new ServiceFactory<T1, T2, T3, T4, T5>(p)).Item5);
         }
 
-        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
+        public static IServiceCollection AddTransientFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -607,13 +626,15 @@ namespace Neo.Extensions.DependencyInjection
             return services.AddScoped(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddScopedFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices) where T : class
+        public static IServiceCollection AddScopedFromFactory<T>(this IServiceCollection services, Func<IServiceFactory<T>, IEnumerable<T>> registerServices)
+            where T : class
         {
             registerServices(new ServiceFactoryRegistry<T>(type => services.AddScoped(type)));
             return services.AddScoped(p => registerServices(new ServiceFactory<T>(p)));
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, (T1, T2)> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -624,7 +645,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2>(p)).Item2);
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2>(this IServiceCollection services, Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2>, IEnumerable<(T1, T2)>> registerServices)
             where T1 : class
             where T2 : class
         {
@@ -635,7 +657,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2>(p)).Select(item => item.Item2));
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, (T1, T2, T3)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -648,7 +671,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Item3);
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3>, IEnumerable<(T1, T2, T3)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -661,7 +685,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2, T3>(p)).Select(item => item.Item3));
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, (T1, T2, T3, T4)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -676,7 +701,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Item4);
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4>, IEnumerable<(T1, T2, T3, T4)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -691,7 +717,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2, T3, T4>(p)).Select(item => item.Item4));
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, (T1, T2, T3, T4, T5)> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -708,7 +735,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddScoped(p => registerServices(new ServiceFactory<T1, T2, T3, T4, T5>(p)).Item5);
         }
 
-        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services, Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
+        public static IServiceCollection AddScopedFromFactory<T1, T2, T3, T4, T5>(this IServiceCollection services,
+            Func<IServiceFactory<T1, T2, T3, T4, T5>, IEnumerable<(T1, T2, T3, T4, T5)>> registerServices)
             where T1 : class
             where T2 : class
             where T3 : class
@@ -732,27 +760,40 @@ namespace Neo.Extensions.DependencyInjection
             where TConfig : class, IConfig
         {
             return services
-                .AddSingleton(GetConfigSection)
+                .AddSingleton(p => GetConfigSection<TConfig>(p, configuration))
                 .AddSingleton<IConfig>(Get<TConfig>);
+        }
 
-            TConfig GetConfigSection(IServiceProvider p)
-            {
-                if (p == null)
-                    throw new ArgumentNullException(nameof(p));
-                if (configuration == null)
-                    throw new ArgumentNullException(nameof(configuration));
-
-                var section = configuration.GetSection(typeof(TConfig).Name);
-                if (section is INeoConfigurationSection neoConfigurationSection)
+        public static IServiceCollection AddKeyedConfig<TConfig>(this IServiceCollection services, IConfiguration configuration) where TConfig : class, IConfig
+        {
+            return services.AddSingleton<IKeyedConfigs<TConfig>>(p =>
                 {
-                    return JsonConvert.DeserializeObject<TConfig>(neoConfigurationSection.ToJson() ?? "{}", new NeoCustomCreationConverter(p)) ??
-                           (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
-                }
+                    var configs = new KeyedConfigs<TConfig>();
+                    foreach (var configurationSection in configuration.GetChildren())
+                        configs[configurationSection.Key] = GetConfigSection<TConfig>(p, configurationSection);
 
-                var config = (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
-                section.Bind(config);
-                return config;
+                    return configs;
+                }).AddSingleton<IReadOnlyDictionary<string, TConfig>>(Get<IKeyedConfigs<TConfig>>)
+                .AddSingleton<IConfig>(Get<IKeyedConfigs<TConfig>>);
+        }
+
+        private static TConfig GetConfigSection<TConfig>(IServiceProvider p, IConfiguration configuration) where TConfig : IConfig
+        {
+            if (p == null)
+                throw new ArgumentNullException(nameof(p));
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+
+            var section = configuration.GetSection(typeof(TConfig).Name);
+            if (section is INeoConfigurationSection neoConfigurationSection)
+            {
+                return JsonConvert.DeserializeObject<TConfig>(neoConfigurationSection.ToJson() ?? "{}", new NeoCustomCreationConverter(p)) ??
+                       (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
             }
+
+            var config = (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
+            section.Bind(config);
+            return config;
         }
 
         private class NeoCustomCreationConverter : CustomCreationConverter<object>
@@ -779,5 +820,23 @@ namespace Neo.Extensions.DependencyInjection
         public static IServiceCollection AddKeyed<T>(this IServiceCollection services, string section) =>
             services.AddSingleton(sp => sp.GetRequiredService<IKeyedServiceProvider>()
                 .GetRequiredService<T>(section));
+
+        public static IServiceCollection AddSingletonKeyedServices<TService>(this IServiceCollection services,
+            Func<IKeyedServiceCollection<TService>, IKeyedServiceCollection<TService>> registerServices) where TService : class
+        {
+            return services.AddSingleton(p => ((KeyedServiceCollection<TService>) registerServices(new KeyedServiceCollection<TService>(p))).Services);
+        }
+
+        public static IServiceCollection AddScopedKeyedServices<TService>(this IServiceCollection services,
+            Func<IKeyedServiceCollection<TService>, IKeyedServiceCollection<TService>> registerServices) where TService : class
+        {
+            return services.AddScoped(p => ((KeyedServiceCollection<TService>) registerServices(new KeyedServiceCollection<TService>(p))).Services);
+        }
+
+        public static IServiceCollection AddTransientKeyedServices<TService>(this IServiceCollection services,
+            Func<IKeyedServiceCollection<TService>, IKeyedServiceCollection<TService>> registerServices) where TService : class
+        {
+            return services.AddTransient(p => ((KeyedServiceCollection<TService>) registerServices(new KeyedServiceCollection<TService>(p))).Services);
+        }
     }
 }

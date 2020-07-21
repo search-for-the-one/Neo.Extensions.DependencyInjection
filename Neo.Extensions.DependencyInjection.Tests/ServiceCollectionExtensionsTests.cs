@@ -2,12 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Neo.Extensions.DependencyInjection.Configurations;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Neo.Extensions.DependencyInjection.Tests
 {
     public class ServiceCollectionExtensionsTests
     {
+        [Test]
+        public void AddKeyedConfigs()
+        {
+            var builder = new NeoConfigurationBuilder();
+            var myConfigs = new Dictionary<string, MyConfig> {{"one", new MyConfig {Name = "One"}}, {"two", new MyConfig {Name = "Two"}}};
+            builder.AddJson(JsonConvert.SerializeObject(myConfigs));
+            var configuration = builder.Build();
+            
+            var services = new ServiceCollection();
+            services.AddKeyedConfig<MyConfig>(configuration);
+            var serviceProvider = services.BuildServiceProvider();
+
+            var configs = serviceProvider.GetRequiredService<IKeyedConfigs<MyConfig>>();
+            CollectionAssert.AreEqual(ToEnumerable(myConfigs), ToEnumerable(configs));
+            
+            Assert.IsNotNull(serviceProvider.GetRequiredService<IReadOnlyDictionary<string, MyConfig>>());
+            Assert.IsNotNull(serviceProvider.GetRequiredService<IConfig>());
+
+            IEnumerable<string> ToEnumerable(IReadOnlyDictionary<string, MyConfig> dict) => dict.OrderBy(x => x.Key).Select(kv => $"{kv.Key} {kv.Value}");
+        }
+        
+        private class MyConfig : IConfig
+        {
+            public string Name { get; set; }
+        }
+        
+        [Test]
+        public void AddKeyedServices()
+        {
+            var services = new ServiceCollection();
+            services.AddSingletonKeyedServices<IInterface1>(c =>
+                c.AddService<MultipleInterfaceImplementation1>()
+                    .AddService<MultipleInterfaceImplementation1>("one")
+                    .AddService(new MultipleInterfaceImplementation2())
+                    .AddService("two", new MultipleInterfaceImplementation2()));
+            services.AddSingleton<MultipleInterfaceImplementation1>();
+            var serviceProvider = services.BuildServiceProvider();
+            var implementations = serviceProvider.GetRequiredService<IReadOnlyDictionary<string, IInterface1>>();
+
+            Assert.IsTrue(implementations.TryGetValue(nameof(MultipleInterfaceImplementation1), out var value1) && value1 is MultipleInterfaceImplementation1);
+            Assert.IsTrue(implementations.TryGetValue(nameof(MultipleInterfaceImplementation2), out var value2) && value2 is MultipleInterfaceImplementation2);
+            Assert.IsTrue(implementations.TryGetValue("one", out var one) && one is MultipleInterfaceImplementation1);
+            Assert.IsTrue(implementations.TryGetValue("two", out var two) && two is MultipleInterfaceImplementation2);
+        }
+
         [Test]
         public void AddSingletonFromFactory()
         {
