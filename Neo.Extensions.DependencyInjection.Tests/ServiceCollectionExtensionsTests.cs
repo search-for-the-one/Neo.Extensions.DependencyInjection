@@ -28,7 +28,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
             Assert.IsNotNull(serviceProvider.GetRequiredService<IReadOnlyDictionary<string, MyConfig>>());
             Assert.IsNotNull(serviceProvider.GetRequiredService<IConfig>());
 
-            IEnumerable<string> ToEnumerable(IReadOnlyDictionary<string, MyConfig> dict) => dict.OrderBy(x => x.Key).Select(kv => $"{kv.Key} {kv.Value}");
+            IEnumerable<string> ToEnumerable(IReadOnlyDictionary<string, MyConfig> dict) => dict.OrderBy(x => x.Key).Select(kv => $"{kv.Key} {kv.Value.Name}");
         }
         
         private class MyConfig : IConfig
