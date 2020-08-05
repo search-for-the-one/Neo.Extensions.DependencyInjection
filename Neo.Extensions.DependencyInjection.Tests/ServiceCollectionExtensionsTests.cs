@@ -14,7 +14,11 @@ namespace Neo.Extensions.DependencyInjection.Tests
         public void AddKeyedConfigs()
         {
             var builder = new NeoConfigurationBuilder();
-            var myConfigs = new Dictionary<string, MyConfig> {{"one", new MyConfig {Name = "One"}}, {"two", new MyConfig {Name = "Two"}}};
+            var myConfigs = new Dictionary<string, MyConfig>
+            {
+                {"one", new MyConfig {Name = "One", SubConfig = new MySubConfig {SubName = "Sub One"}}},
+                {"two", new MyConfig {Name = "Two", SubConfig = new MySubConfig {SubName = "Sub Two"}}}
+            };
             builder.AddJson(JsonConvert.SerializeObject(myConfigs));
             var configuration = builder.Build();
             
@@ -28,12 +32,24 @@ namespace Neo.Extensions.DependencyInjection.Tests
             Assert.IsNotNull(serviceProvider.GetRequiredService<IReadOnlyDictionary<string, MyConfig>>());
             Assert.IsNotNull(serviceProvider.GetRequiredService<IConfig>());
 
-            IEnumerable<string> ToEnumerable(IReadOnlyDictionary<string, MyConfig> dict) => dict.OrderBy(x => x.Key).Select(kv => $"{kv.Key} {kv.Value.Name}");
+            IEnumerable<string> ToEnumerable(IReadOnlyDictionary<string, MyConfig> dict) => dict.OrderBy(x => x.Key).Select(kv => $"{kv.Key} {kv.Value}");
         }
         
         private class MyConfig : IConfig
         {
             public string Name { get; set; }
+            public MySubConfig SubConfig { get; set; } = MySubConfig.Default;
+            public override string ToString()
+            {
+                return $"{Name} {SubConfig.SubName}";
+            }
+        }
+        
+        private class MySubConfig
+        {
+            public string SubName { get; set; }
+
+            public static readonly MySubConfig Default = new MySubConfig {SubName = "Default"};
         }
         
         [Test]

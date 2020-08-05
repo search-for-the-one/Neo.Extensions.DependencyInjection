@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <FileVersion>1.21.0.0</FileVersion>
-    <AssemblyVersion>1.21.0.0</AssemblyVersion>
-    <Version>1.21.0</Version>
+    <FileVersion>1.22.0.0</FileVersion>
+    <AssemblyVersion>1.22.0.0</AssemblyVersion>
+    <Version>1.22.0</Version>
     <Authors>Neo</Authors>
     <PackageTags>DependencyInjection</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -15,7 +15,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/search-for-the-one/Neo.Extensions.DependencyInjection</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>1.21.0</PackageVersion>
+    <PackageVersion>1.22.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
