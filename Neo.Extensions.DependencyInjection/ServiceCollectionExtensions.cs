@@ -814,7 +814,7 @@ namespace Neo.Extensions.DependencyInjection
 
             public override bool CanConvert(Type objectType)
             {
-                return !objectType.Namespace.StartsWith("System") && objectType.IsClass && objectType.GetConstructors().All(x => x.GetParameters().Any());
+                return !objectType.Namespace.StartsWith("System") && objectType.IsClass;
             }
         }
 
