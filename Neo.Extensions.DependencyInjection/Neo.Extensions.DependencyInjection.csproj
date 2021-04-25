@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <FileVersion>1.22.0.0</FileVersion>
-    <AssemblyVersion>1.22.0.0</AssemblyVersion>
-    <Version>1.22.0</Version>
+    <FileVersion>1.23.0.0</FileVersion>
+    <AssemblyVersion>1.23.0.0</AssemblyVersion>
+    <Version>1.23.0</Version>
     <Authors>Neo</Authors>
     <PackageTags>DependencyInjection</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

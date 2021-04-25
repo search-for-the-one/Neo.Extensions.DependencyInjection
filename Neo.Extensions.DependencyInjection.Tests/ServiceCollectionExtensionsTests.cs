@@ -11,6 +11,43 @@ namespace Neo.Extensions.DependencyInjection.Tests
     public class ServiceCollectionExtensionsTests
     {
         [Test]
+        public void ListBindingWithNull()
+        {
+            var builder = new NeoConfigurationBuilder();
+            var configuration = builder.Build();
+            
+            var services = new ServiceCollection();
+            services.AddConfig<ListConfig>(configuration);
+            var serviceProvider = services.BuildServiceProvider();
+
+            var config = serviceProvider.GetRequiredService<ListConfig>();
+            Assert.IsNotNull(config);
+            Assert.IsEmpty(config);
+        }
+        
+        [TestCase("[]", 0)]
+        [TestCase("[\"one\"]", 1)]
+        [TestCase("[\"one\", \"two\", \"three\"]", 3)]
+        public void ListBinding(string value, int count)
+        {
+            var builder = new NeoConfigurationBuilder();
+            builder.AddJson($"{{\"{nameof(ListConfig)}\": {value}}}");
+            var configuration = builder.Build();
+            
+            var services = new ServiceCollection();
+            services.AddConfig<ListConfig>(configuration);
+            var serviceProvider = services.BuildServiceProvider();
+
+            var config = serviceProvider.GetRequiredService<ListConfig>();
+            Assert.AreEqual(count, config.Count);
+        }
+        
+        private class ListConfig: List<string>, IConfig
+        {
+            
+        }
+        
+        [Test]
         public void AddKeyedConfigs()
         {
             var builder = new NeoConfigurationBuilder();
