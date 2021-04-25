@@ -780,17 +780,22 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton<IConfig>(Get<IKeyedConfigs<TConfig>>);
         }
 
-        private static TConfig GetConfigSection<TConfig>(IServiceProvider p, IConfigurationSection section) where TConfig : IConfig
+        private static TConfig GetConfigSection<TConfig>(IServiceProvider p, IConfigurationSection section)
+            where TConfig : IConfig
         {
             if (p == null)
                 throw new ArgumentNullException(nameof(p));
+            
             if (section == null)
                 throw new ArgumentNullException(nameof(section));
 
             if (section is INeoConfigurationSection neoConfigurationSection)
             {
-                return JsonConvert.DeserializeObject<TConfig>(neoConfigurationSection.ToJson() ?? "{}", new NeoCustomCreationConverter(p)) ??
-                       (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
+                var json = neoConfigurationSection.ToJson();
+                return string.IsNullOrEmpty(json)
+                    ? (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig))
+                    : JsonConvert.DeserializeObject<TConfig>(json, new NeoCustomCreationConverter(p)) ??
+                      (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
             }
 
             var config = (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));

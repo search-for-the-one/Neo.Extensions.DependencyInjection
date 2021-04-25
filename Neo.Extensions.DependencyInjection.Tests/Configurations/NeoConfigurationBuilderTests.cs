@@ -84,23 +84,19 @@ namespace Neo.Extensions.DependencyInjection.Tests.Configurations
             var configuration = new ConfigurationBuilder().AddJsonFile("Configurations/appsettings.json")
                 .AddJsonFile("Configurations/appsettings.Development.json").AddEnvironmentVariables().Build();
 
-            AreEqual(configuration, neoConfiguration);
+            AreEqual(neoConfiguration, configuration);
         }
 
-        private static void AreEqual(IConfiguration a, IConfiguration b)
+        private static void AreEqual(IConfiguration neoConfiguration, IConfiguration configuration)
         {
-            var childrenA = a.GetChildren().OrderBy(x => x.Key).ToList();
-            var childrenB = b.GetChildren().OrderBy(x => x.Key).ToList();
+            var neoDict = neoConfiguration.GetChildren().ToDictionary(x => x.Key, x => x.Value);
 
-            Assert.AreEqual(childrenA.Count, childrenB.Count);
-            for (var i = 0; i < childrenA.Count; i++)
+            foreach (var kv in configuration.GetChildren())
             {
-                var childA = childrenA[i];
-                var childB = childrenB[i];
-                Assert.AreEqual(childA.Key, childB.Key);
-                Assert.AreEqual(childA.Path, childB.Path);
-                Assert.AreEqual(childA.Value, childB.Value);
-                AreEqual(childA, childB);
+                if (string.IsNullOrEmpty(kv.Key))
+                    continue;
+
+                Assert.IsTrue(neoDict.Contains(new KeyValuePair<string, string>(kv.Key, kv.Value)));
             }
         }
     }
