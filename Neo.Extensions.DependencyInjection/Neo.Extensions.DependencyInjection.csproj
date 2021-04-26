@@ -15,7 +15,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/search-for-the-one/Neo.Extensions.DependencyInjection</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
-    <PackageVersion>1.22.0</PackageVersion>
+    <PackageVersion>1.23.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
