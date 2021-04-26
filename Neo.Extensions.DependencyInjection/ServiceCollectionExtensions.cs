@@ -780,6 +780,8 @@ namespace Neo.Extensions.DependencyInjection
                 .AddSingleton<IConfig>(Get<IKeyedConfigs<TConfig>>);
         }
 
+        private static readonly string EmptyStringJson = JsonConvert.SerializeObject(string.Empty);
+        
         private static TConfig GetConfigSection<TConfig>(IServiceProvider p, IConfigurationSection section)
             where TConfig : IConfig
         {
@@ -792,7 +794,7 @@ namespace Neo.Extensions.DependencyInjection
             if (section is INeoConfigurationSection neoConfigurationSection)
             {
                 var json = neoConfigurationSection.ToJson();
-                return string.IsNullOrEmpty(json)
+                return string.IsNullOrEmpty(json) || json == EmptyStringJson
                     ? (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig))
                     : JsonConvert.DeserializeObject<TConfig>(json, new NeoCustomCreationConverter(p)) ??
                       (TConfig) ActivatorUtilities.CreateInstance(p, typeof(TConfig));
