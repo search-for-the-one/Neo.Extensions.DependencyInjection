@@ -25,6 +25,7 @@ namespace Neo.Extensions.DependencyInjection.Tests
             Assert.IsEmpty(config);
         }
         
+        [TestCase("null", 0)]
         [TestCase("[]", 0)]
         [TestCase("[\"one\"]", 1)]
         [TestCase("[\"one\", \"two\", \"three\"]", 3)]
